@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <PackageId>ConsolaUI</PackageId>
+        <Version>0.0.1</Version>
+        <Authors>poproshaikin</Authors>
+        <Description>For our programming lessons, we were assigned a project that required me to create a console UI. 
+            But I didn’t want to hardcode a primitive UI using the standard library, 
+            so I decided to quickly put together my own framework for building console interfaces. 
+            I won’t deny that the framework itself is quite simple, 
+            but it's probably better than just using Console.WriteLine. (maybe)</Description>
+        <Company>poproshaikin</Company>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/poproshaikin/ConsolaUI</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/poproshaikin/ConsolaUI</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <PackageReadmeFile>./docs/README.md</PackageReadmeFile>
+        <PackageTags>console ui library</PackageTags>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+</Project>
