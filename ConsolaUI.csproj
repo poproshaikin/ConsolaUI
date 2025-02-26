@@ -23,5 +23,15 @@
 
     <ItemGroup>
         <None Include="README.md" Pack="true" PackagePath="/"/>
+        <None Remove="nupkgs\**" />
+        <None Remove="ConsolaUI.csproj.DotSettings" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="nupkgs\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="nupkgs\**" />
     </ItemGroup>
 </Project>
