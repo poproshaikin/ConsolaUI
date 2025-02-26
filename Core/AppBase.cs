@@ -32,7 +32,6 @@ public abstract class AppBase
         _currentPage = page;
     }
 
-
     protected virtual void Init()
     {
     }

@@ -56,7 +56,7 @@ public abstract class PageBase
         return _elements.Count(el => el.PosY == y);
     }
 
-    private void UpdateState(ConsoleKey key)
+    protected virtual void UpdateState(ConsoleKey key)
     {
         Console.Clear();
         
