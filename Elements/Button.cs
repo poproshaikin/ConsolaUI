@@ -1,32 +1,29 @@
 namespace ConsolaUI;
 
-public class Button : Element
+public class Button : Element, ISelectableElement, IClickableElement
 {
-    private event Action? _onClick;
-    private event Action? _onActive;
-    
     public string Content { get; set; }
 
-    public ConsoleColor ActiveBackgroundColor { get; set; } = ConsoleColor.Yellow;
-    public ConsoleColor ActiveTextColor { get; set; } = ConsoleColor.Black;
+    public ConsoleColor OnSelectedBackgroundColor { get; set; } = ConsoleColor.Yellow;
+    public ConsoleColor OnSelectedTextColor { get; set; } = ConsoleColor.Black;
     
-    public bool Active { get; set; }
+    public bool Selected { get; set; }
+
+    public event Action? OnClick;
+    public event Action? OnSelected;
 
     public Button(string content, Action? onClick = null, string? id = null)
     {
         Id = id;
         Content = content;
         TextColor = ConsoleColor.Blue;
-        _onClick += onClick;
+        OnClick += onClick;
     }
 
-    public void Toggle() => Active = !Active;
-
-    public void OnClick(Action onClick) => _onClick += onClick;
-    public void OnActive(Action onActive) => _onActive += onActive;
+    public void Toggle() => Selected = !Selected;
     
-    public void InvokeClick() => _onClick?.Invoke();
-    public void InvokeActive() => _onActive?.Invoke();
+    public void Click() => OnClick?.Invoke();
+    public void Select() => OnSelected?.Invoke();
     
     public override string GetString()
     {
@@ -35,8 +32,8 @@ public class Button : Element
 
     public override void Print()
     { 
-        Console.BackgroundColor = Active ? ActiveBackgroundColor : BackgroundColor;
-        Console.ForegroundColor = Active ? ActiveTextColor : TextColor;
+        Console.BackgroundColor = Selected ? OnSelectedBackgroundColor : BackgroundColor;
+        Console.ForegroundColor = Selected ? OnSelectedTextColor : TextColor;
         
         Console.Write(GetString());
 
