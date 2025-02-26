@@ -1,6 +1,6 @@
 namespace ConsolaUI;
 
-public abstract class PageBase
+public abstract partial class PageBase
 {
     protected AppBase App { get; set; }
     
@@ -69,7 +69,7 @@ public abstract class PageBase
         if (key == enter_key)
         {
             Button btn = _elements.OfType<Button>().First(el => el.PosY == _currentY && el.PosX == _currentX);
-            btn.InvokeClick();
+            btn.Click();
         }
         else
             MoveCursor(key);
@@ -94,7 +94,7 @@ public abstract class PageBase
         }
         
         Button? btn = _elements.OfType<Button>().FirstOrDefault(el => el.PosY == _currentY && el.PosX == _currentX);
-        btn?.InvokeActive();
+        btn?.Select();
     }
 
     private void PlaceCursorAtFirstButton()
