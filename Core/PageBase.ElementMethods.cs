@@ -31,4 +31,9 @@ public abstract partial class PageBase
     {
         AddElement(new Margin(count));
     }
+    
+    protected void InputField(string label, Action<string?>? onInput = null)
+    {
+        AddElement(new InputField(label, onInput));
+    }
 }
