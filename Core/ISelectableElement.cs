@@ -1,8 +1,8 @@
 namespace ConsolaUI;
 
-public interface ISelectableElement
+public interface ISelectableElement : IElement
 {
-    ConsoleColor OnSelectedBackgroundColor { get; set; }
+    ConsoleColor OnSelectedBackgroundColor { get; set; } 
     ConsoleColor OnSelectedTextColor { get; set; }
 
     bool Selected { get; }
