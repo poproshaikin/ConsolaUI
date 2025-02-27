@@ -1,6 +1,6 @@
 namespace ConsolaUI;
 
-public class Button : Element, ISelectableElement, IClickableElement
+public class Button : ElementBase, ISelectableElement, IClickableElement
 {
     public string Content { get; set; }
 

@@ -1,6 +1,6 @@
 namespace ConsolaUI;
 
-public class NewLine : Element
+public class NewLine : ElementBase
 {
     public override string GetString()
     {

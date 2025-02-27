@@ -1,6 +1,6 @@
 namespace ConsolaUI;
 
-public class Text : Element
+public class Text : ElementBase
 {
     public string Content { get; set; }
 
