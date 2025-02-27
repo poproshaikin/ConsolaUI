@@ -1,6 +1,6 @@
 namespace ConsolaUI;
 
-public abstract class Element : IElement
+public abstract class ElementBase : IElement
 {    
     public string? Id { get; set; }
     
@@ -10,7 +10,7 @@ public abstract class Element : IElement
     public ConsoleColor BackgroundColor { get; set; } 
     public ConsoleColor TextColor { get; set; }
 
-    protected Element()
+    protected ElementBase()
     {
         BackgroundColor = Colors.DefaultBackgroundColor;
         TextColor = Colors.DefaultTextColor;

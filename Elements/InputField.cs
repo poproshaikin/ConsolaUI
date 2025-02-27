@@ -1,6 +1,6 @@
 namespace ConsolaUI;
 
-public class InputField : Element, IClickableElement
+public class InputField : ElementBase, IClickableElement
 {
     public string Placeholder { get; set; }
 

@@ -70,7 +70,7 @@ public abstract partial class PageBase
         _app.Exit();
     }
 
-    protected void AddElement(Element element)
+    protected void AddElement(ElementBase element)
     {
         element.PosY = CountNewLines();
         element.PosX = CountElementsAt(element.PosY);

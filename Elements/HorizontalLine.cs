@@ -1,6 +1,6 @@
 namespace ConsolaUI;
 
-public class HorizontalLine : Element
+public class HorizontalLine : ElementBase
 {
     public int Length { get; set; }
 

@@ -1,6 +1,6 @@
 namespace ConsolaUI;
 
-public class Margin : Element
+public class Margin : ElementBase
 {
     public int Length { get; set; }
 
