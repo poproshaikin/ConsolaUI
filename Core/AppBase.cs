@@ -5,6 +5,12 @@ public abstract class AppBase
     private PageBase? _currentPage;
 
     private bool _initialized;
+    private bool _requestedExit;
+
+    protected AppBase()
+    {
+        _requestedExit = false;
+    }
     
     protected abstract PageBase GetInitialPage();
     
@@ -20,11 +26,14 @@ public abstract class AppBase
 
         _currentPage ??= GetInitialPage();
 
-        while (true)
+        while (!_requestedExit)
         {
+            Console.Clear();
             _currentPage.Render();
             _currentPage.HandleInput();
         }
+        
+        Console.Clear();
     }
 
     public void ChangePage(PageBase page)
@@ -34,5 +43,10 @@ public abstract class AppBase
 
     protected virtual void Init()
     {
+    }
+
+    public void Exit()
+    {
+        _requestedExit = true;
     }
 }
