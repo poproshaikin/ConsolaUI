@@ -1,6 +1,6 @@
 namespace ConsolaUI;
 
-public interface IClickableElement
+public interface IClickableElement : ISelectableElement
 {
     event Action? OnClick;
 
