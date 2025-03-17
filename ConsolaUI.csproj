@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <PackageId>ConsolaUI</PackageId>
-        <Version>0.0.3</Version>
+        <Version>0.0.4</Version>
         <Authors>poproshaikin</Authors>
         <Description>For our programming lessons, we were assigned a project that required me to create a console UI. 
             But I didn’t want to hardcode a primitive UI using the standard library, 
