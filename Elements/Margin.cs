@@ -9,7 +9,7 @@ public class Margin : ElementBase
         Length = 1;
     }
     
-    public Margin(int length)
+    public Margin(int length = 1)
     {
         Length = length;
     }

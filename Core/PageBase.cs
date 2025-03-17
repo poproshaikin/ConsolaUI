@@ -2,16 +2,16 @@ namespace ConsolaUI;
 
 public abstract partial class PageBase
 {
-    private AppBase _app;
-
-    protected AppBase App => _app;
+    private const ConsoleKey enter_key = ConsoleKey.Spacebar;
     
-    private List<IElement> _elements;
-
     private int _currentY;
     private int _currentX;
+    
+    private AppBase _app;
 
-    private const ConsoleKey enter_key = ConsoleKey.Spacebar;
+    // TODO: в майбутньому можливо реалiзувати власний клас, який буде зберiгати елементи i
+    // пам'ятати представлятиме методи для запам'ятовування старих i re-render нових елементiв
+    private List<IElement> _elements;
     
     protected PageBase(AppBase app)
     {
@@ -22,6 +22,7 @@ public abstract partial class PageBase
         PlaceCursorAtFirstSelectable();
     }
     
+    protected AppBase GetApp() => _app;
     protected TApp GetApp<TApp>() where TApp : AppBase => (TApp)_app;
 
     public void Render()
@@ -35,7 +36,7 @@ public abstract partial class PageBase
         }
     }
 
-    protected void Redraw()
+    protected void Rerender()
     {
         int prevX = _currentX;
         int prevY = _currentY;
@@ -62,6 +63,7 @@ public abstract partial class PageBase
 
     protected void ChangePage(PageBase page)
     {
+        //PlaceCursorAtFirstSelectable();
         _app.ChangePage(page);
     }
 
@@ -76,6 +78,14 @@ public abstract partial class PageBase
         element.PosX = CountElementsAt(element.PosY);
         
         _elements.Add(element);
+
+        // Rerender();
+    }
+
+    protected void RemoveElement(string id)
+    {
+        IElement? element = _elements.FirstOrDefault(el => el.Id == id);
+        _elements.Remove(element!);
     }
 
     private int CountNewLines()
@@ -93,7 +103,6 @@ public abstract partial class PageBase
         if (_currentX == -1 && _currentY == -1)
         {
             PlaceCursorAtFirstSelectable();
-            return;
         }
         
         if (key == enter_key)
@@ -123,13 +132,16 @@ public abstract partial class PageBase
                 break;
         }
         
-        ISelectableElement? selectable = _elements.OfType<ISelectableElement>().FirstOrDefault(el => el.PosY == _currentY && el.PosX == _currentX);
+        ISelectableElement? selectable = _elements.OfType<ISelectableElement>()
+            .FirstOrDefault(el => el.PosY == _currentY && el.PosX == _currentX);
+        
         selectable?.Select();
     }
 
     private void PlaceCursorAt(int y, int x)
     {
-        ISelectableElement? selectable = _elements.OfType<ISelectableElement>().FirstOrDefault(el => el.PosY == y && el.PosX == x);
+        ISelectableElement? selectable = _elements.OfType<ISelectableElement>()
+            .FirstOrDefault(el => el.PosY == y && el.PosX == x);
 
         if (selectable is null)
             return;
@@ -164,12 +176,18 @@ public abstract partial class PageBase
         {
             if (selectableElements.Any(el => el.PosY == y))
             {
-                ISelectableElement oldButton = selectableElements.First(el => el.PosY == _currentY && el.PosX == _currentX);
+                var oldButton = selectableElements.FirstOrDefault(el => el.PosY == _currentY && el.PosX == _currentX); 
+                var newButton = selectableElements.FirstOrDefault(el => el.PosY == y);
+
+                if (oldButton is null || newButton is null)
+                {
+                    PlaceCursorAtFirstSelectable();
+                    return;
+                }
+                
                 oldButton.Toggle();
-
-                ISelectableElement newButton = selectableElements.First(el => el.PosY == y);
                 newButton.Toggle();
-
+                
                 _currentY = y;
                 _currentX = newButton.PosX;
 
@@ -181,6 +199,10 @@ public abstract partial class PageBase
     private void MoveCursorDown()
     {
         ISelectableElement[] selectableElements = _elements.OfType<ISelectableElement>().ToArray();
+
+        if (selectableElements.Length == 0)
+            return;
+        
         int maxY = selectableElements.Max(el => el.PosY);
 
         if (_currentY == maxY)
@@ -193,12 +215,18 @@ public abstract partial class PageBase
         {
             if (selectableElements.Any(el => el.PosY == y))
             {
-                var oldButton = selectableElements.First(el => el.PosY == _currentY && el.PosX == _currentX);
+                var oldButton = selectableElements.FirstOrDefault(el => el.PosY == _currentY && el.PosX == _currentX);
+                var newButton = selectableElements.FirstOrDefault(el => el.PosY == y);
+                
+                if (oldButton is null || newButton is null)
+                {
+                    PlaceCursorAtFirstSelectable();
+                    return;
+                }
+
                 oldButton.Toggle();
-
-                var newButton = selectableElements.First(el => el.PosY == y);
                 newButton.Toggle();
-
+                
                 _currentY = y;
                 _currentX = newButton.PosX;
                 break;
@@ -220,10 +248,16 @@ public abstract partial class PageBase
         {
             if (selectableElements.Any(el => el.PosY == _currentY && el.PosX == x))
             {
-                var oldButton = selectableElements.First(el => el.PosY == _currentY && el.PosX == _currentX);
-                oldButton.Toggle();
+                var oldButton = selectableElements.FirstOrDefault(el => el.PosY == _currentY && el.PosX == _currentX);
+                var newButton = selectableElements.FirstOrDefault(el => el.PosY == _currentY && el.PosX == x);
 
-                var newButton = selectableElements.First(el => el.PosY == _currentY && el.PosX == x);
+                if (oldButton is null || newButton is null)
+                {
+                    PlaceCursorAtFirstSelectable();
+                    return;
+                }
+                
+                oldButton.Toggle();
                 newButton.Toggle();
 
                 _currentX = x;
@@ -234,8 +268,17 @@ public abstract partial class PageBase
     
     private void MoveCursorRight()
     {
-        ISelectableElement[] selectableElements = _elements.OfType<ISelectableElement>().ToArray();
-        int maxX = selectableElements.Where(el => el.PosY == _currentY).Max(el => el.PosX);
+        var selectableElements = _elements.OfType<ISelectableElement>().ToArray();
+
+        if (selectableElements.Length == 0)
+            return;
+
+        var atCurrentY = selectableElements.Where(el => el.PosY == _currentY).ToArray();
+
+        if (atCurrentY.Length == 0)
+            return;
+        
+        int maxX = atCurrentY.Max(el => el.PosX);
 
         if (_currentX == maxX)
             return;
@@ -247,10 +290,16 @@ public abstract partial class PageBase
         {
             if (selectableElements.Any(el => el.PosY == _currentY && el.PosX == x))
             {
-                var oldButton = selectableElements.First(el => el.PosY == _currentY && el.PosX == _currentX);
-                oldButton.Toggle();
+                var oldButton = selectableElements.FirstOrDefault(el => el.PosY == _currentY && el.PosX == _currentX);
+                var newButton = selectableElements.FirstOrDefault(el => el.PosY == _currentY && el.PosX == x);
 
-                var newButton = selectableElements.First(el => el.PosY == _currentY && el.PosX == x);
+                if (oldButton is null || newButton is null)
+                {
+                    PlaceCursorAtFirstSelectable();
+                    return;
+                }
+
+                oldButton.Toggle();
                 newButton.Toggle();
 
                 _currentX = x;
